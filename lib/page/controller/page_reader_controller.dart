@@ -1,5 +1,3 @@
-/// @date 26/4/22
-/// describe:
 import 'dart:io';
 
 import 'package:book_reader/common/application.dart';
@@ -24,11 +22,28 @@ class ReaderBinding implements Bindings {
 }
 
 class ReaderController extends GetxController {
+  //当前阅读的主题
   final readerTheme = Application.instance.getReaderTheme.obs;
+
+  //当前加载的章节
   final chapters = <Chapter>[].obs;
+
+  //当前加载的书籍
   final bookModels = <BookModel>[].obs;
 
-  int _page = 0;
+  //当前阅读到的章节的角标
+  final currentChapter = Chapter().obs;
+
+  //控制面板是否关闭
+  final isPanelClose = true.obs;
+
+  //当前查询的角标
+  int _offset = 0;
+
+  int get offset => _offset;
+
+  //当前阅读的书籍
+  BookModel? _bookModel;
 
   ///保存阅读主题
   void save() {
@@ -87,33 +102,36 @@ class ReaderController extends GetxController {
     return fonts;
   }
 
-  ///章节查询
-  Future<bool> queryChapters(BookModel? bookModel, [int? page, int limit = 10]) async {
-    if (page == null) {
-      _page++;
+  ///章节查询,offset：查询起始角标，reverse：角标向前获取，即获取前面的章节
+  Future<bool> queryChapters(
+    BookModel? bookModel, {
+    int? offset,
+    bool reverse = false,
+    int limit = 10,
+  }) async {
+    _bookModel = bookModel;
+
+    if (_offset == 0 && reverse) return true;
+
+    if (offset == null) {
+      _offset = reverse ? _offset -= limit : _offset += limit;
+      _offset = _offset < 0 ? 0 : _offset;
     } else {
-      _page = page;
+      _offset = offset;
     }
     List<Chapter>? dbChapters = await DbManager.instance.chapterDao.query(
       tableName: "chapter_${bookModel?.md5Id}",
-      offset: (_page - 1) * limit,
+      offset: _offset,
       limit: limit,
     );
 
     if (dbChapters == null || dbChapters.isEmpty) return false;
-    if (page == 1) {
-      chapters.clear();
-      chapters.addAll(dbChapters);
+    if (reverse) {
+      chapters.insertAll(0, dbChapters);
     } else {
       chapters.addAll(dbChapters);
     }
     return true;
-  }
-
-  Chapter? getChapter(int pageIndex) {
-    if (chapters.isEmpty) return null;
-    Chapter chapter = chapters[pageIndex];
-    return chapter;
   }
 
   ///调用文件选择器，挑选文件
@@ -140,6 +158,7 @@ class ReaderController extends GetxController {
     });
   }
 
+  ///获取数据库表中所有的书籍
   Future<List<BookModel>> getBooks([bool? forceUpdate]) async {
     if (bookModels.isNotEmpty && forceUpdate == null) return bookModels.value;
     if (forceUpdate != null && forceUpdate || bookModels.isEmpty) {
@@ -150,5 +169,18 @@ class ReaderController extends GetxController {
       }
     }
     return bookModels.value;
+  }
+
+  //滚动到指定章节
+  void scroll2Target(int selectedItem) {
+    chapters.clear();
+    queryChapters(_bookModel, offset: selectedItem);
+  }
+
+  //根据当前章节获取章节所在角标
+  int getChapterIndex(Chapter? chapter) {
+    if (_bookModel == null || chapter == null) return 0;
+    int index = _bookModel!.chapter!.indexOf(chapter);
+    return index < 0 ? 0 : index;
   }
 }

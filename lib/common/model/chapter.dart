@@ -19,34 +19,32 @@ class Chapter with BaseDbModel {
   });
 
   @override
-  int get hashCode => chapterId ?? chapterTitle.hashCode;
+  int get hashCode => chapterTitle.hashCode;
 
   @override
   bool operator ==(Object other) {
     if (other is Chapter) {
-      return other.chapterId == chapterId;
+      return chapterTitle == other.chapterTitle;
     }
     return super == other;
   }
 
   @override
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{}
-      ..put('start', start)
-      ..put('chapter_title', chapterTitle)
-      ..put('end', end)
-      ..put('content', content)
-      ..put('chapter_id', chapterId);
-  }
+  Map<String, dynamic> toJson() => {
+        'start': start,
+        'chapter_title': chapterTitle,
+        'end': end,
+        'content': content,
+        'chapter_id': chapterId,
+      };
 
-  Map<String, dynamic> toDataBaseMap(String content) {
-    return <String, dynamic>{}
-      ..put('start', start)
-      ..put('chapter_title', chapterTitle)
-      ..put('end', end)
-      ..put('content', content)
-      ..put('chapter_id', chapterId);
-  }
+  Map<String, dynamic> toDataBaseMap(String content) => {
+        'start': start,
+        'chapter_title': chapterTitle,
+        'end': end,
+        'content': content,
+        'chapter_id': chapterId,
+      };
 
   Chapter.fromJson(Map json) {
     start = json.asInt('start');

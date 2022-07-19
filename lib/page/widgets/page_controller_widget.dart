@@ -1,7 +1,7 @@
 import 'package:book_reader/common/model/book_model.dart';
 import 'package:book_reader/common/model/reader_theme.dart';
 import 'package:book_reader/page/controller/page_reader_controller.dart';
-import 'package:book_reader/page/widgets/page_contents.dart';
+import 'package:book_reader/page/widgets/chapter_selected_page.dart';
 import 'package:book_reader/page/widgets/page_controll.dart';
 import 'package:book_reader/page/widgets/page_reading.dart';
 import 'package:book_reader/res/index.dart';
@@ -41,37 +41,42 @@ class _PageControllerWidgetState extends State<PageControllerWidget> with Single
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Container(
-        height: 380.0,
-        decoration: BoxDecoration(
-          color: _background ?? Colors.white,
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(25.0), topRight: Radius.circular(25.0)),
-          boxShadow: const [
-            BoxShadow(color: Colours.black26, offset: Offset(0, -10), blurRadius: 20),
-          ],
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            TabBar(
-              tabs: _titles.mapWidget((_, e) => Tab(text: e.tr)),
-              controller: _tabController,
-              labelColor: _fontColor,
-              indicatorColor: _fontColor,
-              unselectedLabelColor: _fontColor?.withOpacity(0.6),
-              indicatorWeight: 4.0,
-            ),
-            Expanded(
-              child: TabBarView(
+      return GestureDetector(
+        onTap: () {
+          controller.isPanelClose.value = true;
+        },
+        child: Container(
+          height: GetPlatform.isMobile ? 380.0 : 280,
+          decoration: BoxDecoration(
+            color: _background ?? Colors.white,
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(25.0), topRight: Radius.circular(25.0)),
+            boxShadow: const [
+              BoxShadow(color: Colours.black26, offset: Offset(0, -10), blurRadius: 20),
+            ],
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 8),
+              TabBar(
+                tabs: _titles.mapWidget((_, e) => Tab(text: e.tr)),
                 controller: _tabController,
-                children: [
-                  PageReading(),
-                  const PageControll(),
-                  PageContents(_bookModel),
-                ],
+                labelColor: _fontColor,
+                indicatorColor: _fontColor,
+                unselectedLabelColor: _fontColor?.withOpacity(0.6),
+                indicatorWeight: 4.0,
               ),
-            ),
-          ],
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    PageReading(),
+                    const PageControll(),
+                    ChapterSelectdPage(_bookModel),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       );
     });

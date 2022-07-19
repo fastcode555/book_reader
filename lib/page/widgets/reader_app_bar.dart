@@ -1,4 +1,5 @@
 import 'package:book_reader/common/model/book_model.dart';
+import 'package:book_reader/common/model/chapter.dart';
 import 'package:book_reader/common/model/reader_theme.dart';
 import 'package:book_reader/res/r.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +10,12 @@ import 'package:xdlibrary/widgets/pin_mark_widget.dart';
 class ReaderAppBar extends StatelessWidget {
   final ReaderTheme readerTheme;
   final BookModel? bookModel;
+  final Chapter? chapter;
 
   const ReaderAppBar(
     this.readerTheme,
-    this.bookModel, {
+    this.bookModel,
+    this.chapter, {
     Key? key,
   }) : super(key: key);
 
@@ -27,7 +30,7 @@ class ReaderAppBar extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          bookModel?.title ?? '',
+          chapter?.chapterTitle ?? bookModel?.title ?? '',
           style: TextStyle(
             fontSize: 18,
             color: readerTheme.fontColor,

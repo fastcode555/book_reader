@@ -36,11 +36,12 @@ class FontEg with BaseDbModel {
   FontEg.normal({this.title = "系统字体", this.fontFamily, this.importPath});
 
   @override
-  Map<String, dynamic> toJson() => <String, dynamic>{}
-    ..put('import_path', importPath)
-    ..put('md5_id', md5Id)
-    ..put('font_family', fontFamily)
-    ..put('title', title);
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'import_path': importPath,
+        'md5_id': md5Id,
+        'font_family': fontFamily,
+        'title': title,
+      };
 
   FontEg.fromJson(Map json) {
     importPath = json.asString('import_path');

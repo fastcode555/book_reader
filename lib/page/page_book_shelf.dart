@@ -23,6 +23,9 @@ class _PageBookShelfState extends State<PageBookShelf> {
   @override
   void initState() {
     super.initState();
+    /* WidgetsBinding.instance.window.onMetricsChanged = () {
+      controller.count.value = controller.count.value + 1;
+    };*/
     controller.getBooks();
   }
 
@@ -34,6 +37,10 @@ class _PageBookShelfState extends State<PageBookShelf> {
       centerTitle: false,
       automaticallyImplyLeading: false,
       actions: [
+        IconButton(
+          onPressed: () => setState(() {}),
+          icon: const Icon(Icons.refresh, color: Colours.ff323232),
+        ),
         IconButton(
           onPressed: controller.importBook,
           icon: const Icon(Icons.add, color: Colours.ff323232),

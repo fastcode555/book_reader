@@ -21,4 +21,5 @@ const Map<String, String> languageEn = {
   Ids.finish: 'finish',
   Ids.font: 'font',
   Ids.importFont: 'import font',
+  Ids.confirm: 'Confirm',
 };

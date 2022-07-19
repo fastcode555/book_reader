@@ -21,4 +21,5 @@ const Map<String, String> languageZhHant = {
   Ids.finish: '結束',
   Ids.font: '字體',
   Ids.importFont: '導入字體',
+	Ids.confirm:'確認',
 };

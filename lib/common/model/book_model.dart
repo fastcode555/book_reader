@@ -39,18 +39,17 @@ class BookModel with BaseDbModel {
   }
 
   @override
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{}
-      ..put('cover', cover)
-      ..put('path', path)
-      ..put('chapter', chapter?.map((v) => v.toJson()).toList())
-      ..put('wordCount', wordCount)
-      ..put('md5_id', md5Id)
-      ..put('author', author)
-      ..put('description', description)
-      ..put('title', title)
-      ..put('chapter_count', chapterCount);
-  }
+  Map<String, dynamic> toJson() => {
+        'cover': cover,
+        'path': path,
+        'wordCount': wordCount,
+        'chapter': chapter?.map((v) => v.toJson()).toList(),
+        'md5_id': md5Id,
+        'author': author,
+        'description': description,
+        'title': title,
+        'chapter_count': chapterCount,
+      };
 
   BookModel.fromJson(Map json) {
     cover = json.asString('cover');

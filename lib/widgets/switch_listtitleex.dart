@@ -1,5 +1,4 @@
 import 'package:book_reader/res/index.dart';
-import 'package:book_reader/res/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
