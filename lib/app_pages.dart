@@ -1,7 +1,6 @@
 import 'package:book_reader/page/controller/page_reader_controller.dart';
 import 'package:book_reader/page/dialog/page_select_font.dart';
 import 'package:book_reader/page/page_reader.dart';
-import 'package:infinity_core/common/transparent_rounter.dart';
 import 'package:infinity_core/core.dart';
 
 import 'debug_page.dart';

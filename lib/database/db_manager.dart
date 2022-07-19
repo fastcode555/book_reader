@@ -22,12 +22,6 @@ class DbManager extends BaseDbManager {
   DbManager._internal();
 
   @override
-  FutureOr<void> onUpgrade(Database db, int oldVersion, int newVersion) {
-    onCreate(db, newVersion);
-    return super.onUpgrade(db, oldVersion, newVersion);
-  }
-
-  @override
   FutureOr<void> onCreate(Database db, int version) async {
     await db.execute(FontEgDao.tableSql());
     await db.execute(ChapterDao.tableSql());

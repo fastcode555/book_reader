@@ -40,7 +40,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
-  flutter_easyloading: ^3.0.5
+  # 官方出品的滚动到指定角标
+  scrollable_positioned_list: ^0.3.2
   infinity_core:
     git:
       url: https://gitlab.initcapp.com/app-dev/infinity_core
@@ -106,7 +107,7 @@ flutter:
         - asset: assets/fonts/leigai.ttf
           style: normal
 
-    # 雷盖体
+    # 摄图摩登小方体
     - family: modeng
       fonts:
         - asset: assets/fonts/modeng.ttf
@@ -130,22 +131,8 @@ flutter:
         - asset: assets/fonts/zhanku.ttf
           style: normal
 
-    # 站酷快乐体
+    # 仓耳小丸子
     - family: ball
       fonts:
         - asset: assets/fonts/ball.ttf
           style: normal
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages

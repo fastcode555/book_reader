@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:book_reader/common/model/book_model.dart';
 import 'package:book_reader/common/model/chapter.dart';
+import 'package:book_reader/common/utils/string_ext.dart';
 import 'package:book_reader/database/chapter_dao.dart';
 import 'package:book_reader/database/db_manager.dart';
 import 'package:book_reader/res/index.dart';
@@ -14,9 +15,15 @@ import 'package:path/path.dart';
 const int _maxPosition = 50000;
 
 class LocalParser {
-  static final RegExp _preChapterRegex =
-      RegExp(r"^(\\s{0,10})((\u5e8f[\u7ae0\u8a00]?)|(\u524d\u8a00)|(\u6954\u5b50))(\\s{0,10})", multiLine: true);
   static final RegExp _authorRegex = RegExp(r'(?<=\u4f5c\u8005\uff1a).*?$', multiLine: true);
+
+  //前言，楔子的分割
+  static final List<RegExp> _preChaterRegexs = [
+    RegExp(".*?((\u5e8f[\u7ae0\u8a00]?)|(\u524d\u8a00)|(\u6954\u5b50)).*?\n", multiLine: true),
+    RegExp("^(\\s{0,10})((\u5e8f[\u7ae0\u8a00]?)|(\u524d\u8a00)|(\u6954\u5b50))(\\s{0,10})", multiLine: true),
+  ];
+
+  ///章节分割的正则
   static final List<RegExp> _chapterRegexs = [
     RegExp(
         "^(.{0,8})(\u7b2c)([0-9\u96f6\u4e00\u4e8c\u4e24\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\u767e\u5343\u4e07\u58f9\u8d30\u53c1\u8086\u4f0d\u9646\u67d2\u634c\u7396\u62fe\u4f70\u4edf]{1,10})([\u7ae0\u8282\u56de\u96c6\u5377])(.{0,30})\$",
@@ -41,8 +48,8 @@ class LocalParser {
     if (file!.existsSync()) {
       try {
         Stream<List<int>> inputStream = file!.openRead(startPosition, lastPosition);
-        Stream<String> _stream = await utf8.decoder.bind(inputStream);
-        String result = await _stream.last;
+        Stream<String> stream = await utf8.decoder.bind(inputStream);
+        String result = await stream.last;
         return result;
       } catch (e) {
         if (e is StateError) {
@@ -99,14 +106,15 @@ class LocalParser {
 
     //获取到作者的名称
     try {
-      RegExpMatch? _authorMatch = _authorRegex.firstMatch(content);
-      _bookModel.author = _authorMatch?.group(0);
+      RegExpMatch? authorMatch = _authorRegex.firstMatch(content);
+      _bookModel.author = authorMatch?.group(0);
     } catch (e) {
       print(e);
     }
 
     //进行章节分割
     List<Chapter> _chapters = [];
+    //await _splitPreChapter(_chapters, content);
     await _splitChapter(_chapters, content);
 
     //最后一章，章节总数未知，需要计算出来，后面才能根据计算阅读整数的百分比
@@ -127,7 +135,6 @@ class LocalParser {
     return _bookModel;
   }
 
-  ///章节分割
   _splitChapter(List<Chapter> chapters, String content) async {
     //分割章节
     for (RegExp _chapterRegex in _chapterRegexs) {
@@ -139,13 +146,23 @@ class LocalParser {
         int index = content.indexOf(title!);
         String _head = content.substring(0, index);
         List<int> _headBytes = utf8.encode(_head);
-        Chapter _chapter = Chapter(chapterTitle: title);
+        Chapter _chapter = Chapter(chapterTitle: title.clearSymbol);
         _chapter.start = startPosition + _headBytes.length;
 
         if (chapters.isEmpty) {
           Chapter _preChapter = Chapter();
           _preChapter.start = 0;
           _preChapter.end = _headBytes.length;
+          //楔子，前言的章节获取
+          for (RegExp reg in _preChaterRegexs) {
+            if (!TextUtil.isEmpty(_preChapter.chapterTitle)) break;
+            Iterable<RegExpMatch> iterable = reg.allMatches(content);
+            for (RegExpMatch reg in iterable) {
+              String? title = reg.group(0);
+              if (TextUtil.isEmpty(title)) continue;
+              _preChapter.chapterTitle = title?.clearSymbol;
+            }
+          }
           chapters.add(_preChapter);
         }
         //赋予前一章文章结束的节点,且赋值前一章的内容

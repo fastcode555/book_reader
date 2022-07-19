@@ -1,35 +1,33 @@
+import 'package:book_reader/res/index.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingUtil {
   static void show() {
-    EasyLoading.show(
-      maskType: EasyLoadingMaskType.custom,
-      indicator: Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: SpinKitWave(
-          size: 40,
-          itemBuilder: (_, index) {
-            return DecoratedBox(
+    Get.dialog(
+      Stack(
+        children: [
+          Center(
+            child: Container(
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(6),
+                color: Colors.black.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(16),
               ),
-            );
-          },
-        ),
+              child: const CupertinoActivityIndicator(color: Colors.white),
+            ),
+          )
+        ],
       ),
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
     );
+
     // ..customAnimation = CustomAnimation();
   }
 
   static void dismiss() {
-    EasyLoading.dismiss();
+    Get.dismiss();
   }
 }

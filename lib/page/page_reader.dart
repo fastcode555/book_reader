@@ -106,7 +106,7 @@ class PageReader extends BaseView<ReaderController> {
                     builder: (_, pageIndex, child) {
                       Chapter? chapter = controller.getChapter(pageIndex);
                       String? title = chapter?.chapterTitle;
-                      TextUtil.isEmpty(title?.trim()) ? '' : '($title)';
+                      title = TextUtil.isEmpty(title?.trim()) ? '' : '($title)';
                       return Text(
                         '$title${(chapter?.chapterId ?? 0)}/${_bookModel!.chapterCount}',
                         style: TextStyle(

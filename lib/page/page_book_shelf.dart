@@ -1,4 +1,3 @@
-import 'package:book_reader/common/model/book_model.dart';
 import 'package:book_reader/database/db_manager.dart';
 import 'package:book_reader/page/controller/page_reader_controller.dart';
 import 'package:book_reader/res/index.dart';
@@ -24,6 +23,7 @@ class _PageBookShelfState extends State<PageBookShelf> {
   @override
   void initState() {
     super.initState();
+    controller.getBooks();
   }
 
   @override
@@ -40,17 +40,14 @@ class _PageBookShelfState extends State<PageBookShelf> {
         ),
         _buildEditWidget(),
       ],
-      body: FutureBuilder<List<BookModel>>(
-        future: controller.getBooks(),
-        builder: (_, AsyncSnapshot<List<BookModel>> snapshot) {
+      body: Obx(
+        () {
           return BookshelfWidget(
-            books: snapshot.data,
+            books: controller.bookModels.value,
             isEdit: _isEdit,
             deleteCallback: (book) {
-              setState(() {
-                DbManager.instance.bookModelDao.delete(book);
-                controller.bookModels.remove(book);
-              });
+              DbManager.instance.bookModelDao.delete(book);
+              controller.bookModels.remove(book);
             },
           );
         },

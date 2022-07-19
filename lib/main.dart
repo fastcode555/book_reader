@@ -6,7 +6,6 @@ import 'package:book_reader/res/themes.dart';
 import 'package:book_reader/res/translation_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_ume/flutter_ume.dart';
 import 'package:flutter_ume_kit_console/flutter_ume_kit_console.dart';
 import 'package:flutter_ume_kit_device/flutter_ume_kit_device.dart';
@@ -24,9 +23,6 @@ void main() async {
   Global.init(
     () async {
       await DependencyInjection.init();
-      /*if (GetPlatform.isMobile) {
-        await Firebase.initializeApp();
-      }*/
       //初始化网络配置
       debugPrint("冷启动时间${DateTime.now().millisecondsSinceEpoch - date}");
       // if (kDebugMode) {
@@ -74,27 +70,6 @@ class MyApp extends BaseView {
 
   @override
   Widget build(BuildContext context) {
-    EasyLoading.instance
-      ..displayDuration = const Duration(milliseconds: 2000)
-      ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-      ..loadingStyle = EasyLoadingStyle.custom
-      ..indicatorColor = Colors.transparent
-      ..backgroundColor = Colors.transparent
-      ..textColor = Colors.transparent
-      ..maskColor = Colors.transparent
-      ..userInteractions = false
-      ..dismissOnTap = false
-      ..maskType = EasyLoadingMaskType.custom
-      ..successWidget = Column(
-        children: const [
-          Icon(Icons.done, size: 60, color: Colors.white),
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Text("操作成功", style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      );
-
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: CoreConfig.kProfileMode,
@@ -108,25 +83,23 @@ class MyApp extends BaseView {
       locale: LanguageUtil.initLanguage().toLocale(),
       theme: Themes.theme(Colours.mainColor),
       translations: TranslationService(),
-      builder: EasyLoading.init(
-        builder: (ctx, child) {
-          return OKToast(
-            backgroundColor: Colors.black54,
-            textPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-            radius: 20.0,
-            position: ToastPosition.bottom,
-            child: GestureDetector(
-              child: child,
-              onTap: () {
-                FocusScopeNode currentFocus = FocusScope.of(context);
-                if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                }
-              },
-            ),
-          );
-        },
-      ),
+      builder: (ctx, child) {
+        return OKToast(
+          backgroundColor: Colors.black54,
+          textPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          radius: 20.0,
+          position: ToastPosition.bottom,
+          child: GestureDetector(
+            child: Material(child: child),
+            onTap: () {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }
