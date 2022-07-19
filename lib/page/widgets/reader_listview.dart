@@ -93,4 +93,10 @@ class _ReaderListViewState extends State<ReaderListView> {
       },
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.clear();
+  }
 }

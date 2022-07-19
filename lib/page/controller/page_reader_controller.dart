@@ -183,4 +183,9 @@ class ReaderController extends GetxController {
     int index = _bookModel!.chapter!.indexOf(chapter);
     return index < 0 ? 0 : index;
   }
+
+  void clear() {
+    chapters.clear();
+    isPanelClose.value = true;
+  }
 }
