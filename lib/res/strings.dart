@@ -20,4 +20,5 @@ class Ids {
   static const String font = 'font';
   static const String importFont = 'importFont';
 	static const String confirm = 'confirm';
+	static const String addBooks = 'addBooks';
 }

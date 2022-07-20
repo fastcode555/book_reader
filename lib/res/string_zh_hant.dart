@@ -22,4 +22,5 @@ const Map<String, String> languageZhHant = {
   Ids.font: '字體',
   Ids.importFont: '導入字體',
 	Ids.confirm:'確認',
+	Ids.addBooks:'添加書籍',
 };

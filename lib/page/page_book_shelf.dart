@@ -1,5 +1,7 @@
+import 'package:book_reader/common/model/book_model.dart';
 import 'package:book_reader/database/db_manager.dart';
 import 'package:book_reader/page/controller/page_reader_controller.dart';
+import 'package:book_reader/page/widgets/empty_widget.dart';
 import 'package:book_reader/res/index.dart';
 import 'package:book_reader/res/strings.dart';
 import 'package:book_reader/widgets/book_shelf_widget.dart';
@@ -45,12 +47,19 @@ class _PageBookShelfState extends State<PageBookShelf> {
       ],
       body: Obx(
         () {
+          List<BookModel> books = controller.bookModels.value;
+          if (books.isEmpty) {
+            return EmptyWidget(onPressed: controller.importBook);
+          }
           return BookshelfWidget(
-            books: controller.bookModels.value,
+            books: books,
             isEdit: _isEdit,
             deleteCallback: (book) {
               DbManager.instance.bookModelDao.delete(book);
               controller.bookModels.remove(book);
+              if (controller.bookModels.value.isEmpty) {
+                _deleteBook();
+              }
             },
           );
         },
@@ -70,11 +79,7 @@ class _PageBookShelfState extends State<PageBookShelf> {
     } else {
       return IconButton(
         onPressed: _deleteBook,
-        icon: const Icon(
-          Icons.edit,
-          color: Colours.ff323232,
-          size: 20,
-        ),
+        icon: const Icon(Icons.edit, color: Colours.ff323232, size: 20),
       );
     }
   }
