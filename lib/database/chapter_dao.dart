@@ -1,6 +1,7 @@
 import 'package:book_reader/common/model/chapter.dart';
 import 'package:json2dart_db/json2dart_db.dart';
 
+///书籍章节的表
 class ChapterDao extends BaseDao<Chapter> {
   static const String _tableName = 'chapter';
 

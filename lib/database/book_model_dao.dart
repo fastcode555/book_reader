@@ -5,6 +5,7 @@ import 'package:book_reader/database/db_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:json2dart_db/json2dart_db.dart';
 
+///书籍的表
 class BookModelDao extends BaseDao<BookModel> {
   static const String _tableName = "book_model";
 

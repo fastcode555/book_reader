@@ -14,10 +14,7 @@ class DbManager extends BaseDbManager {
 
   static DbManager get instance => _getInstance();
 
-  static DbManager _getInstance() {
-    _instance ??= DbManager._internal();
-    return _instance!;
-  }
+  static DbManager _getInstance() => _instance ??= DbManager._internal();
 
   DbManager._internal();
 
