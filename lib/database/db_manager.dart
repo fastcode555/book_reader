@@ -29,7 +29,7 @@ class DbManager extends BaseDbManager {
   }
 
   @override
-  int getDbVersion() => 4;
+  int getDbVersion() => 6;
 
   BookModelDao? _bookModelDao;
 
