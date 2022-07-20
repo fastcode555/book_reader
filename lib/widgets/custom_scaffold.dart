@@ -163,7 +163,7 @@ class CustomScaffold extends StatelessWidget {
     if (automaticallyImplyLeading) {
       return leading ??
           IconButton(
-            icon: PinSvg(R.icReturn, color: Colours.ff323232, width: 17.0, height: 14.3),
+            icon: const PinSvg(R.icReturn, color: Colours.ff323232, width: 17.0, height: 14.3),
             onPressed: () => Navigator.of(context).pop(),
           );
     }

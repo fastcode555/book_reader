@@ -15,6 +15,7 @@ import 'package:flutter_ume_kit_show_code/flutter_ume_kit_show_code.dart';
 import 'package:flutter_ume_kit_ui/flutter_ume_kit_ui.dart';
 import 'package:infinity_core/core.dart';
 import 'package:infinity_core/model/language_model.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'debug_page.dart';
 
@@ -22,6 +23,22 @@ void main() async {
   int date = DateTime.now().millisecondsSinceEpoch;
   Global.init(
     () async {
+      ///隐藏掉顶部的标题栏
+      if (GetPlatform.isDesktop) {
+        await windowManager.ensureInitialized();
+        WindowOptions windowOptions = const WindowOptions(
+          center: true,
+          minimumSize: Size(375, 200),
+          backgroundColor: Colors.transparent,
+          skipTaskbar: false,
+          titleBarStyle: TitleBarStyle.hidden,
+        );
+        windowManager.waitUntilReadyToShow(windowOptions, () async {
+          await windowManager.show();
+          await windowManager.focus();
+        });
+      }
+
       await DependencyInjection.init();
       //初始化网络配置
       debugPrint("冷启动时间${DateTime.now().millisecondsSinceEpoch - date}");
@@ -43,14 +60,12 @@ void main() async {
         ..register(const DeviceInfoPanel())
         ..register(Console())
         ..register(DioInspector(dio: HttpManager.instance.getDio()));
-      runApp(const UMEWidget(child: MyApp(), enable: true)); // 初始化
+      runApp(const UMEWidget(enable: true, child: MyApp())); // 初始化
     },
     languages: [
       LanguageModel('English', 'en', 'US'),
       LanguageModel('简体中文', 'zh-Hans', 'CN'),
       LanguageModel('繁体中文', 'zh-Hant', 'HK'),
-      LanguageModel('ไทย', 'th', 'TH'),
-      LanguageModel('हिन्दी', 'hi', 'IN'),
     ],
   );
 }

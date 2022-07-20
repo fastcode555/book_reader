@@ -45,7 +45,7 @@ class PageReader extends BaseView<ReaderController> {
               () => AnimatedPositioned(
                 left: 0,
                 right: 0,
-                top: controller.isPanelClose.value ? -50 : 0,
+                top: controller.isPanelClose.value ? -100 : 0,
                 duration: const Duration(milliseconds: 300),
                 child: ReaderAppBar(_readTheme, _bookModel, controller.currentChapter.value),
               ),

@@ -72,7 +72,7 @@ class _ReaderListViewState extends State<ReaderListView> {
     return Obx(
       () {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: _padding),
+          padding: EdgeInsets.fromLTRB(_padding, 20, _padding, 0),
           child: ScrollablePositionedList.builder(
             itemScrollController: _scrollController,
             itemPositionsListener: itemPositionsListener,

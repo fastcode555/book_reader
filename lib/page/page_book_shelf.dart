@@ -23,9 +23,6 @@ class _PageBookShelfState extends State<PageBookShelf> {
   @override
   void initState() {
     super.initState();
-    /* WidgetsBinding.instance.window.onMetricsChanged = () {
-      controller.count.value = controller.count.value + 1;
-    };*/
     controller.getBooks();
   }
 
@@ -34,7 +31,6 @@ class _PageBookShelfState extends State<PageBookShelf> {
     return CustomScaffold(
       backgroundColor: Colors.white,
       titleId: Ids.bookshelf,
-      centerTitle: false,
       automaticallyImplyLeading: false,
       actions: [
         IconButton(
