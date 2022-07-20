@@ -30,7 +30,7 @@
 
 ![Alt](screenshot/theme_ink.png)
 
-## 水墨效果
+## 夜晚主题
 
 ![Alt](screenshot/theme_dark.png)
 
