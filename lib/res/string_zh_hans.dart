@@ -21,6 +21,6 @@ const Map<String, String> languageZhHans = {
   Ids.finish: '结束',
   Ids.font: '字体',
   Ids.importFont: '导入字体',
-	Ids.confirm:'确认',
-	Ids.addBooks:'添加书籍',
+  Ids.confirm: '确认',
+  Ids.addBooks: '添加书籍',
 };

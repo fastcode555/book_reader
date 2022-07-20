@@ -22,5 +22,5 @@ const Map<String, String> languageEn = {
   Ids.font: 'font',
   Ids.importFont: 'import font',
   Ids.confirm: 'Confirm',
-	Ids.addBooks:'Add books',
+  Ids.addBooks: 'Add books',
 };
