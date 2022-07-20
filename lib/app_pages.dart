@@ -1,5 +1,4 @@
 import 'package:book_reader/page/controller/page_reader_controller.dart';
-import 'package:book_reader/page/dialog/page_select_font.dart';
 import 'package:book_reader/page/page_reader.dart';
 import 'package:infinity_core/core.dart';
 
@@ -32,11 +31,6 @@ class AppPages {
       name: DebugPage.routeName,
       page: () => const DebugPage(),
     ),
-    _page(
-      name: PageFontDialog.routeName,
-      page: () => const PageFontDialog(),
-      transparentRoute: true,
-    ),
   ];
 
   static final unknownRoute = _page(
@@ -47,23 +41,10 @@ class AppPages {
   static GetPage _page({
     required String name,
     required GetPageBuilder page,
-    bool transparentRoute = false,
     Bindings? binding,
     Transition? transition,
     CustomTransition? customTransition,
   }) {
-    if (transparentRoute) {
-      return TransparentRoute(
-        name: name,
-        binding: binding,
-        transition: transition ?? Transition.downToUp,
-        page: () {
-          Monitor.instance.putPage(name);
-          return page();
-        },
-      );
-    }
-
     return GetPage(
       name: name,
       binding: binding,

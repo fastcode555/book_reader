@@ -28,6 +28,8 @@ class LoadingUtil {
   }
 
   static void dismiss() {
-    Get.dismiss();
+    if (Get.isDialogOpen ?? false) {
+      Get.back();
+    }
   }
 }

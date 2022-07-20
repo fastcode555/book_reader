@@ -121,13 +121,6 @@ class _BookShelf extends StatelessWidget {
             style: const TextStyle(color: Colors.white),
           ),
         );
-      } else {
-        _childWidget = ImageLoader.roundCorner(
-          _book.cover,
-          height: 145.0,
-          width: _itemWidth,
-          radius: 8,
-        );
       }
 
       if (isEdit) {

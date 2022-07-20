@@ -30,13 +30,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  adobe_xd: ^2.0.1
   xdlibrary: ^1.1.1
   json2dart_db: ^0.0.2
   json2dart_safe: ^1.4.3
   #bitsdojo_window: ^0.1.1+1
   file_picker: ^4.6.1
-  desktop_drop: ^0.3.3
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
@@ -44,9 +42,7 @@ dependencies:
   scrollable_positioned_list: ^0.3.2
   window_manager: ^0.2.5
   infinity_core:
-    git:
-      url: https://gitlab.initcapp.com/app-dev/infinity_core
-      ref: develop_optimize_monitor
+    path: thrid_party/infinity_core
 
 dev_dependencies:
   flutter_test:

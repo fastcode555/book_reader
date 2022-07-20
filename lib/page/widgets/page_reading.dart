@@ -199,7 +199,12 @@ class PageReading extends StatelessWidget {
 
   //选择字体，并更新所选中的字体
   void _handleSelectFont() {
-    NavigatorUtil.pushName(PageFontDialog.routeName);
+    showDialog(
+      context: Get.context!,
+      builder: (_) {
+        return const PageFontDialog();
+      },
+    );
   }
 }
 

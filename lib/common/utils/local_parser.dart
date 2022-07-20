@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:book_reader/common/model/book_model.dart';
 import 'package:book_reader/common/model/chapter.dart';
+import 'package:book_reader/common/utils/md5_utils.dart';
 import 'package:book_reader/common/utils/string_ext.dart';
 import 'package:book_reader/database/chapter_dao.dart';
 import 'package:book_reader/database/db_manager.dart';

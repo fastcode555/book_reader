@@ -4,12 +4,12 @@ import 'package:book_reader/common/dependency_injection.dart';
 import 'package:book_reader/res/colours.dart';
 import 'package:book_reader/res/themes.dart';
 import 'package:book_reader/res/translation_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ume/flutter_ume.dart';
 import 'package:flutter_ume_kit_console/flutter_ume_kit_console.dart';
 import 'package:flutter_ume_kit_device/flutter_ume_kit_device.dart';
-import 'package:flutter_ume_kit_dio/flutter_ume_kit_dio.dart';
 import 'package:flutter_ume_kit_perf/flutter_ume_kit_perf.dart';
 import 'package:flutter_ume_kit_show_code/flutter_ume_kit_show_code.dart';
 import 'package:flutter_ume_kit_ui/flutter_ume_kit_ui.dart';
@@ -42,25 +42,27 @@ void main() async {
       await DependencyInjection.init();
       //初始化网络配置
       debugPrint("冷启动时间${DateTime.now().millisecondsSinceEpoch - date}");
-      // if (kDebugMode) {
-      PluginManager.instance
-        ..register(const MonitorPlugin())
-        ..register(const MonitorActionsPlugin())
-        ..register(const WidgetInfoInspector())
-        ..register(const WidgetInfoInspector())
-        ..register(const WidgetDetailInspector())
-        ..register(const ColorSucker())
-        ..register(AlignRuler())
-        ..register(const ColorPicker()) // 新插件
-        ..register(const TouchIndicator()) // 新插件
-        ..register(Performance())
-        ..register(const ShowCode())
-        ..register(const MemoryInfoPage())
-        ..register(CpuInfoPage())
-        ..register(const DeviceInfoPanel())
-        ..register(Console())
-        ..register(DioInspector(dio: HttpManager.instance.getDio()));
-      runApp(const UMEWidget(enable: true, child: MyApp())); // 初始化
+      if (kReleaseMode) {
+        runApp(const MyApp());
+      } else {
+        PluginManager.instance
+          ..register(const MonitorPlugin())
+          ..register(const MonitorActionsPlugin())
+          ..register(const WidgetInfoInspector())
+          ..register(const WidgetInfoInspector())
+          ..register(const WidgetDetailInspector())
+          ..register(const ColorSucker())
+          ..register(AlignRuler())
+          ..register(const ColorPicker()) // 新插件
+          ..register(const TouchIndicator()) // 新插件
+          ..register(Performance())
+          ..register(const ShowCode())
+          ..register(const MemoryInfoPage())
+          ..register(CpuInfoPage())
+          ..register(const DeviceInfoPanel())
+          ..register(Console());
+        runApp(const UMEWidget(enable: true, child: MyApp()));
+      }
     },
     languages: [
       LanguageModel('English', 'en', 'US'),
@@ -87,9 +89,8 @@ class MyApp extends BaseView {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      enableLog: CoreConfig.kProfileMode,
+      enableLog: kReleaseMode,
       scrollBehavior: MyCustomScrollBehavior(),
-      logWriterCallback: Logger.write,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       defaultTransition: Transition.cupertino,
