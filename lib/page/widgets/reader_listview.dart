@@ -1,6 +1,7 @@
 import 'package:book_reader/common/model/book_model.dart';
 import 'package:book_reader/common/model/chapter.dart';
 import 'package:book_reader/common/model/reader_theme.dart';
+import 'package:book_reader/database/db_manager.dart';
 import 'package:book_reader/page/controller/page_reader_controller.dart';
 import 'package:book_reader/res/index.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _ReaderListViewState extends State<ReaderListView> {
   @override
   void initState() {
     super.initState();
-    controller.queryChapters(widget.bookModel, offset: 0).then((value) {
+    controller.queryChapters(widget.bookModel, offset: widget.bookModel.lastIndex ?? 0).then((value) {
       controller.currentChapter.value = controller.chapters.value[0];
     });
     //返回当前页面可见的position
@@ -46,8 +47,11 @@ class _ReaderListViewState extends State<ReaderListView> {
       if (positions.isNotEmpty) {
         ItemPosition position = positions.toList()[0];
         Chapter chapter = controller.chapters[position.index];
+        debugPrint(
+            "position:${position.index},itemLeadingEdge:${position.itemLeadingEdge},itemTrailingEdge:${position.itemTrailingEdge}");
         if (chapter != controller.currentChapter.value) {
           controller.currentChapter.value = chapter;
+          widget.bookModel.lastIndex = controller.getChapterIndex(chapter);
           //如果是最后一章，则加载更多章节补充到末尾
           if (position.index == controller.chapters.length - 1) {
             controller.queryChapters(widget.bookModel);
@@ -57,7 +61,6 @@ class _ReaderListViewState extends State<ReaderListView> {
             //   _scrollController.jumpTo(index: 0);
             // });
             // _lastPage = position.index;
-            _scrollController.jumpTo(index: 0);
           }
         }
       }
@@ -98,5 +101,6 @@ class _ReaderListViewState extends State<ReaderListView> {
   void dispose() {
     super.dispose();
     controller.clear();
+    DbManager.instance.bookModelDao.update(widget.bookModel);
   }
 }

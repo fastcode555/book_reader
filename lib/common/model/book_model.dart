@@ -14,6 +14,8 @@ class BookModel with BaseDbModel {
   String? description;
   String? title;
   int? chapterCount;
+  int? lastIndex;
+  double? lastOffset;
 
   BookModel({
     this.cover,
@@ -25,6 +27,8 @@ class BookModel with BaseDbModel {
     this.description,
     this.title,
     this.chapterCount,
+    this.lastIndex,
+    this.lastOffset,
   });
 
   @override
@@ -49,6 +53,8 @@ class BookModel with BaseDbModel {
         'description': description,
         'title': title,
         'chapter_count': chapterCount,
+        'last_index': lastIndex,
+        'last_offset': lastOffset,
       };
 
   BookModel.fromJson(Map json) {
@@ -61,6 +67,8 @@ class BookModel with BaseDbModel {
     description = json.asString('description');
     title = json.asString('title');
     chapterCount = json.asInt('chapter_count');
+    lastIndex = json.asInt('last_index');
+    lastOffset = json.asDouble('last_offset');
   }
 
   static BookModel toBean(Map json) => BookModel.fromJson(json);

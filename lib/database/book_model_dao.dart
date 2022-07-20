@@ -17,6 +17,8 @@ class BookModelDao extends BaseDao<BookModel> {
       "`author` TEXT,"
       "`description` TEXT,"
       "`title` TEXT,"
+      "`last_index` INTEGER,"
+      "`last_offset` DOUBLE,"
       "`chapter_count` INTEGER)";
 
   @override
