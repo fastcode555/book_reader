@@ -8,6 +8,7 @@ import 'package:book_reader/common/utils/string_ext.dart';
 import 'package:book_reader/database/chapter_dao.dart';
 import 'package:book_reader/database/db_manager.dart';
 import 'package:book_reader/res/index.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
 /// @date 2/5/22
@@ -35,6 +36,9 @@ class LocalParser {
 
   String? path;
   File? file;
+
+  //进行章节分割
+  final List<Chapter> _chapters = [];
 
   LocalParser(this.path) {
     file = File(path!);
@@ -103,20 +107,19 @@ class LocalParser {
     String tableName = "chapter_${_bookModel.md5Id}";
     DbManager.instance.chapterDao.execute(ChapterDao.tableSql(tableName));
 
-    String content = await _read();
+    currentContent = await _read();
 
     //获取到作者的名称
     try {
-      RegExpMatch? authorMatch = _authorRegex.firstMatch(content);
+      RegExpMatch? authorMatch = _authorRegex.firstMatch(currentContent);
       _bookModel.author = authorMatch?.group(0);
     } catch (e) {
       print(e);
     }
 
-    //进行章节分割
-    List<Chapter> _chapters = [];
-    //await _splitPreChapter(_chapters, content);
-    await _splitChapter(_chapters, content);
+    while (!TextUtil.isEmpty(currentContent)) {
+      await _splitChapter();
+    }
 
     //最后一章，章节总数未知，需要计算出来，后面才能根据计算阅读整数的百分比
     Chapter _chapter = _chapters[_chapters.length - 1];
@@ -131,51 +134,57 @@ class LocalParser {
     //由于macos不知怎么去获取读取文件的权限，所以分割后，获取章节的内容,并存储到数据库中
     for (Chapter chapter in _chapters) {
       String _chapterContent = await read(chapter.start, chapter.end);
-      DbManager.instance.chapterDao.insertMap(chapter.toDataBaseMap(_chapterContent), tableName);
+      await DbManager.instance.chapterDao.insertMap(chapter.toDataBaseMap(_chapterContent), tableName);
+      debugPrint('正在写入章节：${chapter.chapterTitle}');
     }
     return _bookModel;
   }
 
-  _splitChapter(List<Chapter> chapters, String content) async {
+  //每次读取的，解决递归层级过深，导致的StackOverflow
+  String currentContent = '';
+  int index = 0;
+  String _head = '';
+  List<int> _headBytes = [];
+
+  _splitChapter() async {
     //分割章节
     for (RegExp _chapterRegex in _chapterRegexs) {
-      Iterable<RegExpMatch> iterable = _chapterRegex.allMatches(content);
+      Iterable<RegExpMatch> iterable = _chapterRegex.allMatches(currentContent);
       if (iterable.isEmpty) continue;
       for (RegExpMatch reg in iterable) {
         String? title = reg.group(0);
         if (TextUtil.isEmpty(title)) continue;
-        int index = content.indexOf(title!);
-        String _head = content.substring(0, index);
-        List<int> _headBytes = utf8.encode(_head);
+        index = currentContent.indexOf(title!);
+        _head = currentContent.substring(0, index);
+        _headBytes = utf8.encode(_head);
         Chapter _chapter = Chapter(chapterTitle: title.clearSymbol);
         _chapter.start = startPosition + _headBytes.length;
 
-        if (chapters.isEmpty) {
+        if (_chapters.isEmpty) {
           Chapter _preChapter = Chapter();
           _preChapter.start = 0;
           _preChapter.end = _headBytes.length;
           //楔子，前言的章节获取
           for (RegExp reg in _preChaterRegexs) {
             if (!TextUtil.isEmpty(_preChapter.chapterTitle)) break;
-            Iterable<RegExpMatch> iterable = reg.allMatches(content);
+            Iterable<RegExpMatch> iterable = reg.allMatches(currentContent);
             for (RegExpMatch reg in iterable) {
               String? title = reg.group(0);
               if (TextUtil.isEmpty(title)) continue;
               _preChapter.chapterTitle = title?.clearSymbol;
             }
           }
-          chapters.add(_preChapter);
+          _chapters.add(_preChapter);
         }
         //赋予前一章文章结束的节点,且赋值前一章的内容
-        chapters[chapters.length - 1].end = _chapter.start;
-        chapters.add(_chapter);
+        _chapters[_chapters.length - 1].end = _chapter.start;
+        _chapters.add(_chapter);
       }
     }
 
     startPosition = lastPosition;
     lastPosition = lastPosition + _maxPosition;
-    String _content = await _read();
-    if (TextUtil.isEmpty(_content.trim())) return;
-    await _splitChapter(chapters, _content);
+    currentContent = await _read();
+    debugPrint("当前章节数：${_chapters.length},最后一章${_chapters[_chapters.length - 1].chapterTitle}");
   }
 }
