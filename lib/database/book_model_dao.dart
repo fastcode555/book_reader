@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:book_reader/common/model/book_model.dart';
 import 'package:book_reader/database/db_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:json2dart_db/json2dart_db.dart';
+import 'package:json2dart_dbffi/json2dart_dbffi.dart';
 
 ///书籍的表
 class BookModelDao extends BaseDao<BookModel> {

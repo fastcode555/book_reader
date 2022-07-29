@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:json2dart_db/json2dart_db.dart';
+import 'package:json2dart_dbffi/json2dart_dbffi.dart';
 import 'package:json2dart_safe/json2dart.dart';
 
 class Chapter with BaseDbModel {

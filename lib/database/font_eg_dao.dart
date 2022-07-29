@@ -1,5 +1,5 @@
 import 'package:book_reader/common/model/font_eg.dart';
-import 'package:json2dart_db/json2dart_db.dart';
+import 'package:json2dart_dbffi/json2dart_dbffi.dart';
 
 ///用户自定义导入字体的表
 class FontEgDao extends BaseDao<FontEg> {

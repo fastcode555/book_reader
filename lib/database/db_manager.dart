@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:json2dart_db/database/base_db_manager.dart';
+import 'package:json2dart_dbffi/json2dart_dbffi.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'book_model_dao.dart';

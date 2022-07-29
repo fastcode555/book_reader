@@ -1,5 +1,5 @@
 import 'package:book_reader/common/model/chapter.dart';
-import 'package:json2dart_db/json2dart_db.dart';
+import 'package:json2dart_dbffi/json2dart_dbffi.dart';
 
 ///书籍章节的表
 class ChapterDao extends BaseDao<Chapter> {

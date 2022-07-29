@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:book_reader/common/model/chapter.dart';
-import 'package:json2dart_db/json2dart_db.dart';
+import 'package:json2dart_dbffi/json2dart_dbffi.dart';
 import 'package:json2dart_safe/json2dart.dart';
 
 class BookModel with BaseDbModel {
