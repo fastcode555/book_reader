@@ -7,12 +7,13 @@ class FontEgDao extends BaseDao<FontEg> {
 
   FontEgDao() : super(_tableName, 'md5_id');
 
-  static String tableSql([String? tableName]) => ""
-      "CREATE TABLE IF NOT EXISTS `${tableName ?? _tableName}` ("
-      "`import_path` TEXT,"
-      "`md5_id` TEXT PRIMARY KEY,"
-      "`font_family` TEXT,"
-      "`title` TEXT)";
+  static String tableSql([String? tableName]) => '''
+     CREATE TABLE IF NOT EXISTS `${tableName ?? _tableName}` (
+      `import_path` TEXT,
+      `md5_id` TEXT PRIMARY KEY,
+      `font_family` TEXT,
+      `title` TEXT
+      );''';
 
   @override
   FontEg fromJson(Map json) => FontEg.fromJson(json);

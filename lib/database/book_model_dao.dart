@@ -11,19 +11,20 @@ class BookModelDao extends BaseDao<BookModel> {
 
   BookModelDao() : super(_tableName, "md5_id");
 
-  static String tableSql([String? tableName]) => ""
-      "CREATE TABLE IF NOT EXISTS `${tableName ?? _tableName}` ("
-      "`cover` TEXT,"
-      "`path` TEXT,"
-      "`chapter` TEXT,"
-      "`wordCount` INTEGER,"
-      "`md5_id` TEXT PRIMARY KEY,"
-      "`author` TEXT,"
-      "`description` TEXT,"
-      "`title` TEXT,"
-      "`last_index` INTEGER,"
-      "`last_offset` DOUBLE,"
-      "`chapter_count` INTEGER)";
+  static String tableSql([String? tableName]) => '''
+      CREATE TABLE IF NOT EXISTS `${tableName ?? _tableName}` (
+      `cover` TEXT,
+      `path` TEXT,
+      `chapter` TEXT,
+      `wordCount` INTEGER,
+      `md5_id` TEXT PRIMARY KEY,
+      `author` TEXT,
+      `description` TEXT,
+      `title` TEXT,
+      `last_index` INTEGER,
+      `last_offset` DOUBLE,
+      `chapter_count` INTEGER
+      );''';
 
   @override
   FutureOr<void> onUpgrade(int oldVersion, int newVersion) {

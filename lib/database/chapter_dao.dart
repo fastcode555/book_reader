@@ -7,13 +7,14 @@ class ChapterDao extends BaseDao<Chapter> {
 
   ChapterDao() : super(_tableName, 'chapter_id');
 
-  static String tableSql([String? tableName]) => ""
-      "CREATE TABLE IF NOT EXISTS `${tableName ?? _tableName}` ("
-      "`start` INTEGER,"
-      "`chapter_title` TEXT,"
-      "`end` INTEGER,"
-      "`content` TEXT,"
-      "`chapter_id` INTEGER PRIMARY KEY AUTOINCREMENT)";
+  static String tableSql([String? tableName]) => '''
+     CREATE TABLE IF NOT EXISTS `${tableName ?? _tableName}` (
+      `start` INTEGER,
+      `chapter_title` TEXT,
+      `end` INTEGER,
+      `content` TEXT,
+      `chapter_id` INTEGER PRIMARY KEY AUTOINCREMENT
+      );''';
 
   @override
   Chapter fromJson(Map json) => Chapter.fromJson(json);
